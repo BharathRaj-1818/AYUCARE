@@ -1,0 +1,160 @@
+/* Main App Styles */
+
+/* Sidebar styles */
+.sidebar {
+  background: linear-gradient(180deg, #1F3623 0%, #2F5233 100%);
+  min-height: 100vh;
+}
+
+.sidebar-link {
+  @apply flex items-center gap-3 px-4 py-3 rounded-lg text-[#E1EDE5]/80 hover:bg-white/10 hover:text-white transition-colors duration-200;
+}
+
+.sidebar-link.active {
+  @apply bg-white/15 text-white font-medium;
+}
+
+/* Dashboard cards */
+.stat-card {
+  @apply bg-white rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow duration-300 p-6 flex flex-col gap-2;
+}
+
+.stat-card:hover {
+  @apply border-[#2F5233]/30;
+}
+
+/* Data table styles */
+.data-table {
+  @apply w-full;
+}
+
+.data-table th {
+  @apply text-left py-3 px-4 text-sm font-semibold text-stone-600 bg-stone-50 border-b border-stone-200;
+}
+
+.data-table td {
+  @apply py-3 px-4 text-sm text-stone-700 border-b border-stone-100;
+}
+
+.data-table tr:hover td {
+  @apply bg-[#F2F7F4];
+}
+
+/* Form styles */
+.form-group {
+  @apply flex flex-col gap-2;
+}
+
+.form-label {
+  @apply text-sm font-medium text-stone-700;
+}
+
+/* Patient profile */
+.patient-profile-card {
+  @apply bg-white rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow duration-300 p-6;
+}
+
+.patient-stat {
+  @apply flex items-center justify-between py-2 border-b border-stone-100 last:border-0;
+}
+
+/* Food card */
+.food-card {
+  @apply bg-white rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow duration-300 p-4 hover:border-[#2F5233]/40 cursor-pointer;
+}
+
+.food-card .food-name {
+  @apply font-semibold text-stone-800;
+}
+
+.food-card .food-hindi {
+  @apply text-sm text-stone-500;
+}
+
+/* Diet chart */
+.meal-slot {
+  @apply bg-[#F2F7F4] rounded-lg p-4 border border-[#E1EDE5];
+}
+
+.meal-slot-header {
+  @apply flex items-center justify-between mb-3;
+}
+
+.meal-time {
+  @apply text-xs text-stone-500;
+}
+
+/* Chart colors for nutrients */
+.nutrient-protein { color: #2F5233; }
+.nutrient-carbs { color: #D4A373; }
+.nutrient-fat { color: #E9C46A; }
+.nutrient-fiber { color: #90A955; }
+
+/* Loading states */
+.skeleton {
+  @apply animate-pulse bg-stone-200 rounded;
+}
+
+/* Empty states */
+.empty-state {
+  @apply flex flex-col items-center justify-center py-16 text-center;
+}
+
+.empty-state-icon {
+  @apply w-16 h-16 text-stone-300 mb-4;
+}
+
+/* Badge styles */
+.badge {
+  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+}
+
+.badge-success { @apply bg-green-100 text-green-800; }
+.badge-warning { @apply bg-yellow-100 text-yellow-800; }
+.badge-error { @apply bg-red-100 text-red-800; }
+.badge-info { @apply bg-blue-100 text-blue-800; }
+
+/* Modal overlay */
+.modal-overlay {
+  @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center;
+}
+
+/* Toast customization */
+[data-sonner-toast] {
+  --normal-bg: #2F5233;
+  --normal-text: white;
+}
+
+/* Responsive sidebar */
+@media (max-width: 768px) {
+  .sidebar-mobile {
+    @apply fixed inset-y-0 left-0 z-40 transform -translate-x-full transition-transform duration-300;
+  }
+  
+  .sidebar-mobile.open {
+    @apply translate-x-0;
+  }
+}
+
+/* Hero section for login */
+.hero-gradient {
+  background: linear-gradient(135deg, #FAFAF5 0%, #E1EDE5 50%, #FAFAF5 100%);
+}
+
+/* Nutrient progress bars */
+.nutrient-bar {
+  @apply h-2 rounded-full overflow-hidden bg-stone-200;
+}
+
+.nutrient-bar-fill {
+  @apply h-full rounded-full transition-all duration-500;
+}
+
+/* Calendar customization */
+.rdp-day_selected {
+  background-color: #2F5233 !important;
+}
+
+.rdp-day_today {
+  border-color: #D4A373 !important;
+}

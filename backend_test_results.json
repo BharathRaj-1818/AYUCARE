@@ -1,0 +1,104 @@
+{
+  "timestamp": "2026-03-10T13:34:07.579473",
+  "total_tests": 16,
+  "passed_tests": 15,
+  "success_rate": 93.75,
+  "test_results": [
+    {
+      "test": "User Registration",
+      "success": true,
+      "details": "User ID: cd77d306-1d8f-4fd2-a162-04181b2a0e66",
+      "error": ""
+    },
+    {
+      "test": "User Login",
+      "success": true,
+      "details": "Token received",
+      "error": ""
+    },
+    {
+      "test": "Get User Profile",
+      "success": true,
+      "details": "Email: test_user_133402@ayucare.com",
+      "error": ""
+    },
+    {
+      "test": "Dashboard Stats",
+      "success": true,
+      "details": "Patient count: 0",
+      "error": ""
+    },
+    {
+      "test": "Seed Foods Database",
+      "success": true,
+      "details": "Response: Successfully seeded 83 Ayurvedic foods",
+      "error": ""
+    },
+    {
+      "test": "Get Foods List",
+      "success": true,
+      "details": "Found 50 foods",
+      "error": ""
+    },
+    {
+      "test": "Get Food Categories",
+      "success": true,
+      "details": "Found 13 categories",
+      "error": ""
+    },
+    {
+      "test": "Search Foods",
+      "success": true,
+      "details": "Found 2 rice items out of 2 results",
+      "error": ""
+    },
+    {
+      "test": "Filter Foods by Category",
+      "success": true,
+      "details": "Found 7 grain items",
+      "error": ""
+    },
+    {
+      "test": "Filter Foods by Rasa",
+      "success": true,
+      "details": "Found 20 sweet foods",
+      "error": ""
+    },
+    {
+      "test": "Create Patient",
+      "success": true,
+      "details": "Patient ID: 7a164d67-0949-44cf-b426-41c374d482bf, BMI: 22.0",
+      "error": ""
+    },
+    {
+      "test": "Get Patients List",
+      "success": true,
+      "details": "Found 1 patients",
+      "error": ""
+    },
+    {
+      "test": "Get Patient Detail",
+      "success": true,
+      "details": "Patient: Test Patient",
+      "error": ""
+    },
+    {
+      "test": "Update Patient",
+      "success": true,
+      "details": "Updated patient name and weight",
+      "error": ""
+    },
+    {
+      "test": "AI Diet Generation",
+      "success": false,
+      "details": "",
+      "error": "Status: 500, Response: {'detail': \"AI generation failed: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}\"}"
+    },
+    {
+      "test": "Cleanup Test Data",
+      "success": true,
+      "details": "Removed test patient and diet chart",
+      "error": ""
+    }
+  ]
+}

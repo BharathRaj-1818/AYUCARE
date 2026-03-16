@@ -1,0 +1,198 @@
+{
+  "identity": {
+    "name": "AyuCare",
+    "description": "A comprehensive cloud-based Practice Management & Nutrient Analysis Software for Ayurvedic Dietitians.",
+    "tone": "Professional, Holistic, Scientific, Trustworthy, Earthy",
+    "target_audience": "Ayurvedic practitioners, dietitians, nutritionists"
+  },
+  "typography": {
+    "primary_font": "Manrope",
+    "secondary_font": "Merriweather",
+    "mono_font": "JetBrains Mono",
+    "scale": {
+      "h1": "text-4xl md:text-5xl font-serif font-bold tracking-tight text-primary-900",
+      "h2": "text-3xl md:text-4xl font-serif font-semibold tracking-tight text-primary-800",
+      "h3": "text-2xl md:text-3xl font-serif font-medium text-primary-800",
+      "body": "text-base md:text-lg font-sans text-stone-700 leading-relaxed",
+      "small": "text-sm font-sans text-stone-500",
+      "label": "text-xs font-sans font-bold uppercase tracking-wider text-stone-400"
+    },
+    "instructions": "Use Merriweather for all headings (h1-h3) to evoke tradition and authority. Use Manrope for all body text, UI elements, and data tables for maximum readability."
+  },
+  "colors": {
+    "palette": {
+      "primary": {
+        "DEFAULT": "#2F5233",
+        "foreground": "#FFFFFF",
+        "50": "#F2F7F4",
+        "100": "#E1EDE5",
+        "200": "#C3DBC9",
+        "300": "#9FC4A9",
+        "400": "#76A685",
+        "500": "#528562",
+        "600": "#3A6647",
+        "700": "#2F5233",
+        "800": "#26422A",
+        "900": "#1F3623"
+      },
+      "secondary": {
+        "DEFAULT": "#D4A373",
+        "foreground": "#2F5233",
+        "50": "#FAF6F0",
+        "100": "#F4EAD9",
+        "200": "#EBD5B0",
+        "300": "#E0BF86",
+        "400": "#D4A373",
+        "500": "#C28A55",
+        "600": "#A66F3D",
+        "700": "#8A5830",
+        "800": "#6E4425",
+        "900": "#54331B"
+      },
+      "background": "#FAFAF5",
+      "foreground": "#292524",
+      "card": "#FFFFFF",
+      "card_foreground": "#292524",
+      "muted": "#F5F5F0",
+      "muted_foreground": "#78716C",
+      "border": "#E7E5E4",
+      "input": "#E7E5E4",
+      "ring": "#2F5233"
+    },
+    "semantic": {
+      "success": "#4F772D",
+      "warning": "#E9C46A",
+      "error": "#BC4749",
+      "info": "#90A955"
+    },
+    "gradients": {
+      "hero": "bg-gradient-to-br from-[#FAFAF5] via-[#E1EDE5] to-[#FAFAF5]",
+      "card_hover": "hover:bg-gradient-to-br hover:from-white hover:to-[#F2F7F4]"
+    }
+  },
+  "layout": {
+    "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+    "spacing": {
+      "section": "py-16 md:py-24",
+      "component": "p-6 md:p-8",
+      "gap": "gap-6 md:gap-8"
+    },
+    "grid_system": {
+      "dashboard": "grid grid-cols-1 md:grid-cols-12 gap-6",
+      "cards": "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+    },
+    "sidebar": {
+      "width": "w-64",
+      "collapsed_width": "w-20",
+      "bg": "bg-[#1F3623]",
+      "text": "text-[#E1EDE5]"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-[#2F5233] text-white hover:bg-[#3A6647] shadow-md hover:shadow-lg transition-all duration-300 rounded-lg px-6 py-2.5 font-medium",
+      "secondary": "bg-[#F2F7F4] text-[#2F5233] hover:bg-[#E1EDE5] border border-[#2F5233]/20 rounded-lg px-6 py-2.5 font-medium",
+      "outline": "bg-transparent border border-[#2F5233] text-[#2F5233] hover:bg-[#2F5233] hover:text-white rounded-lg px-6 py-2.5 font-medium",
+      "ghost": "bg-transparent text-[#2F5233] hover:bg-[#F2F7F4] rounded-lg px-4 py-2 font-medium"
+    },
+    "cards": {
+      "base": "bg-white rounded-xl border border-[#E7E5E4] shadow-sm hover:shadow-md transition-all duration-300 p-6",
+      "interactive": "cursor-pointer hover:-translate-y-1 hover:border-[#2F5233]/30"
+    },
+    "inputs": {
+      "base": "bg-white border border-[#E7E5E4] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#2F5233]/20 focus:border-[#2F5233] transition-all outline-none placeholder:text-stone-400"
+    },
+    "badges": {
+      "base": "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+      "default": "border-transparent bg-[#2F5233] text-white hover:bg-[#2F5233]/80",
+      "secondary": "border-transparent bg-[#F2F7F4] text-[#2F5233] hover:bg-[#F2F7F4]/80",
+      "outline": "text-[#292524]"
+    }
+  },
+  "visual_enhancers": {
+    "radius": "rounded-xl",
+    "shadows": {
+      "soft": "shadow-[0_4px_20px_-4px_rgba(47,82,51,0.1)]",
+      "card": "shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)]"
+    },
+    "textures": {
+      "noise": "bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-soft-light pointer-events-none fixed inset-0 z-50"
+    },
+    "glassmorphism": "bg-white/80 backdrop-blur-md border border-white/20"
+  },
+  "images": {
+    "hero_bg": {
+      "url": "https://images.unsplash.com/photo-1600381893560-522c5d239fa0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwxfHxheXVydmVkaWMlMjBoZXJicyUyMGFuZCUyMHNwaWNlcyUyMGZsYXQlMjBsYXl8ZW58MHx8fHwxNzczMTQ4NTUyfDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Ayurvedic herbs and spices flat lay",
+      "category": "hero"
+    },
+    "dashboard_consultation": {
+      "url": "https://images.unsplash.com/photo-1758691462126-2ee47c8bf9e7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTN8MHwxfHNlYXJjaHwxfHxkb2N0b3IlMjBwYXRpZW50JTIwdGFsa2luZ3xlbnwwfHx8fDE3NzMxNDg1NzR8MA&ixlib=rb-4.1.0&q=85",
+      "alt": "Doctor consulting patient",
+      "category": "dashboard"
+    },
+    "food_bowl": {
+      "url": "https://images.unsplash.com/photo-1614648692330-eb129aeb6880?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzZ8MHwxfHNlYXJjaHwxfHxoZWFsdGh5JTIwdmVnZXRhcmlhbiUyMGZvb2QlMjBib3dsJTIwYWVzdGhldGljfGVufDB8fHx8MTc3MzE0ODU1Nnww&ixlib=rb-4.1.0&q=85",
+      "alt": "Healthy vegetarian food bowl",
+      "category": "nutrition"
+    },
+    "herbal_powder": {
+      "url": "https://images.unsplash.com/photo-1600728257188-480e132c1610?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwyfHxheXVydmVkaWMlMjBoZXJicyUyMGFuZCUyMHNwaWNlcyUyMGZsYXQlMjBsYXl8ZW58MHx8fHwxNzczMTQ4NTUyfDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Ayurvedic powder in glass bowl",
+      "category": "decorative"
+    }
+  },
+  "icons": {
+    "library": "lucide-react",
+    "style": "stroke-width-1.5",
+    "mapping": {
+      "dashboard": "LayoutDashboard",
+      "patients": "Users",
+      "diet": "Utensils",
+      "food": "Apple",
+      "reports": "FileText",
+      "settings": "Settings",
+      "logout": "LogOut",
+      "add": "Plus",
+      "edit": "Edit2",
+      "delete": "Trash2",
+      "search": "Search",
+      "filter": "Filter"
+    }
+  },
+  "accessibility": {
+    "contrast": "Ensure all text meets WCAG AA standards. Use #2F5233 on #FAFAF5 for high contrast.",
+    "focus_states": "Visible focus rings using ring-2 ring-offset-2 ring-[#2F5233]",
+    "semantic_html": "Use proper heading hierarchy (h1-h6), landmarks (nav, main, aside), and button/input labels."
+  },
+  "instructions_to_main_agent": [
+    "1. SETUP: Install 'lucide-react' and 'recharts' if not present.",
+    "2. THEME: Update 'tailwind.config.js' to use the custom color palette defined in 'colors'. Override the default shadcn variables in 'index.css' to match the earthy theme (Cream background, Green primary).",
+    "3. FONTS: Import 'Merriweather' and 'Manrope' from Google Fonts in 'index.css'. Apply 'font-serif' to headings and 'font-sans' to body.",
+    "4. LAYOUT: Create a responsive sidebar layout for the dashboard. Use the 'dashboard_consultation' image for the patient management section empty state or header.",
+    "5. COMPONENTS: Customize shadcn components to have 'rounded-xl' and soft shadows. Avoid sharp edges.",
+    "6. CHARTS: Use 'recharts' with the custom color palette (Primary Green, Secondary Gold, etc.) for nutrient analysis.",
+    "7. DATA: Ensure all interactive elements have 'data-testid' attributes.",
+    "8. MOCK DATA: Use realistic Ayurvedic data (Doshas: Vata, Pitta, Kapha) in placeholders."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients.",
+    "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur).",
+    "You MUST NOT apply universal transition. Eg: 'transition: all'. This results in breaking transforms. Always add transitions for specific interactive elements like button, input excluding transforms.",
+    "You MUST NOT center align the app container, ie do not add '.App { text-align: center; }' in the css file. This disrupts the human natural reading flow of text.",
+    "Always use modern button styles like pill-shaped, or sharp button with interaction animations & color relevant to the app style.",
+    "NEVER: use AI assistant Emoji characters like 🤖🧠💭💡🔮🎯📚🎭🎬🎪🎉🎊🎁🎀🎂🍰🎈🎨🎰💰💵💳🏦💎🪙💸🤑📊📈📉💹🔢🏆🥇 etc for icons.",
+    "Every interaction needs micro-animations - hover states, transitions, parallax effects, and entrance animations. Static = dead.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Subtle grain textures, noise overlays, custom cursors, selection states, and loading animations: separates good from extraordinary.",
+    "Main agent relies on these image URLs. Missing categories (especially sponsor logos) = main agent will use placeholder text which is FORBIDDEN.",
+    "Prioritize using pre-existing components from src/components/ui when applicable.",
+    "Create new components that match the style and conventions of existing components when needed.",
+    "Examine existing components to understand the project's component patterns before creating new ones.",
+    "Components MUST use named exports (export const ComponentName = ...).",
+    "Pages MUST use default exports (export default function PageName() {...}).",
+    "Use 'sonner' for toasts. Sonner component are located in '/app/src/components/ui/sonner.tsx'."
+  ]
+}
