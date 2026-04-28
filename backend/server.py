@@ -15,6 +15,7 @@ import asyncio
 from datetime import datetime, timezone, timedelta
 import jwt
 import bcrypt
+from groq import Groq
 from google import genai
 from google.genai import types
 from reportlab.lib.pagesizes import A4
@@ -41,9 +42,9 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
-if GEMINI_API_KEY:
-    client = genai.Client(api_key=GEMINI_API_KEY)
+GROQ_API_KEY = os.environ.get('GROQ_API_KEY', '')
+if GROQ_API_KEY:
+    client = Groq(api_key=GROQ_API_KEY)
 
 
 JWT_SECRET = os.environ.get('JWT_SECRET', 'ayucare-secret-key-2024')
@@ -555,44 +556,50 @@ def calculate_prakriti_scores(answers: List[PrakritiAnswer]) -> PrakritiScore:
     desc = {"Vata":"Creative, energetic, quick-thinking. Tendency toward dryness, irregularity, and anxiety when imbalanced.","Pitta":"Intelligent, focused, driven. Tendency toward inflammation, irritability, and perfectionism when imbalanced.","Kapha":"Calm, nurturing, stable. Tendency toward weight gain, lethargy, and attachment when imbalanced.","Vata-Pitta":"Energetic and sharp. Driven but prone to burnout, anxiety, and inflammation.","Pitta-Vata":"Sharp and creative. May experience restlessness combined with intensity.","Pitta-Kapha":"Determined and steady. Strong constitution but may accumulate heat and weight.","Kapha-Pitta":"Grounded with sharp focus. Strong immunity but may struggle with sluggishness.","Vata-Kapha":"Creative and calm but may lack consistency and stamina.","Kapha-Vata":"Steady with creative bursts. May swing between overactivity and inertia."}
     return PrakritiScore(vata=vp, pitta=pp, kapha=kp, dominant=label, secondary=sec, description=desc.get(label, f"Dominant {label} constitution."))
 
-# ==================== GEMINI HELPER ====================
-
-async def call_gemini(prompt: str) -> str:
+async def call_ai(prompt: str) -> str:
     """
-    Call Google Gemini 1.5 Flash — 100% FREE.
-    Free tier: 15 requests/min, 1 million tokens/day, no credit card needed.
-    Get key at: https://aistudio.google.com/app/apikey
+    Call Groq API (Llama 3.3 70B) — 100% FREE, unlimited for now.
+    
+    Free tier limits (as of 2024):
+    - 6000 requests/day
+    - 30 requests/minute
+    - No credit card required
+    
+    Get your free API key at: https://console.groq.com/keys
+    
+    Model: llama-3.3-70b-versatile
+    - Fast: ~500 tokens/sec
+    - Smart: Better than GPT-3.5
+    - Free: No credit card, no payment ever needed
     """
     try:
         import asyncio
         loop = asyncio.get_event_loop()
-
+ 
         def _call():
-            response = client.models.generate_content(
-                model='gemini-1.5-flash',
-                contents=prompt,
-                config={
-                    "temperature": 0.7,
-                    "max_output_tokens": 4096,
-                    "response_mime_type": "text/plain",
-                }
+            response = groq_client.chat.completions.create(
+                model="llama-3.3-70b-versatile",  # or "mixtral-8x7b-32768" for faster
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.7,
+                max_tokens=4096,
             )
-            return response.text
-
+            return response.choices[0].message.content
+ 
         text = await loop.run_in_executor(None, _call)
         text = text.strip()
-
+ 
         # Strip markdown code fences if model wraps response in them
         if text.startswith("```"):
             lines = text.split("\n")
             lines = lines[1:] if lines[0].startswith("```") else lines
             lines = lines[:-1] if lines and lines[-1].strip() == "```" else lines
             text = "\n".join(lines).strip()
-
+ 
         return text
     except Exception as e:
-        logger.error(f"Gemini API error: {e}")
+        logger.error(f"Groq API error: {e}")
         raise HTTPException(status_code=500, detail=f"AI generation failed: {str(e)}")
+    
 # ==================== JITSI MEET HELPER ====================
 
 
@@ -861,7 +868,7 @@ async def delete_diet_chart(chart_id: str, user: dict=Depends(get_current_user))
 # ==================== AI DIET GENERATION ====================
 
 @api_router.post("/ai/generate-diet", response_model=DietChartResponse)
-async def generate_diet_with_ai(request: AIGenerateRequest, user: dict=Depends(get_current_user)):
+async def call_ai(prompt: str) -> str:
     patient = await db.patients.find_one({"id":request.patient_id,"user_id":user["id"]},{"_id":0})
     if not patient: raise HTTPException(status_code=404, detail="Patient not found")
     foods = await db.foods.find({},{"_id":0,"name":1,"category":1,"calories":1,"rasa":1,"virya":1,"dosha_effect":1}).to_list(100)
@@ -882,23 +889,37 @@ FOODS AVAILABLE: {json.dumps(foods_summary[:25])}
 Return ONLY valid JSON, no markdown fences:
 {{"title":"...","target_calories":1800,"season":"{ritu['key']}","season_name":"{ritu['name']}","notes":"Prakriti and seasonal reasoning...","meals":[{{"day":1,"breakfast":{{"time":"7:00 AM","items":["item (portion)"],"calories":300,"ayurvedic_note":"..."}},"mid_morning":{{"time":"10:00 AM","items":["item"],"calories":100,"ayurvedic_note":"..."}},"lunch":{{"time":"12:30 PM","items":["item1","item2"],"calories":500,"ayurvedic_note":"..."}},"evening_snack":{{"time":"4:00 PM","items":["item"],"calories":150,"ayurvedic_note":"..."}},"dinner":{{"time":"7:00 PM","items":["item1","item2"],"calories":400,"ayurvedic_note":"..."}}}}]}}"""
     try:
-        diet_plan = json.loads(await call_gemini(prompt))
-        cid = str(uuid.uuid4()); now = datetime.now(timezone.utc).isoformat()
-        doc = {"id":cid,"patient_id":request.patient_id,"patient_name":patient.get("name"),"title":diet_plan.get("title",f"Diet Plan for {patient.get('name')}"),"start_date":datetime.now(timezone.utc).strftime("%Y-%m-%d"),"end_date":(datetime.now(timezone.utc)+timedelta(days=request.duration_days)).strftime("%Y-%m-%d"),"target_calories":diet_plan.get("target_calories"),"notes":diet_plan.get("notes",""),"meals":diet_plan.get("meals",[]),"total_daily_nutrients":{"calories":diet_plan.get("target_calories",1800),"protein_g":60,"carbs_g":250,"fat_g":50,"fiber_g":25},"season":diet_plan.get("season",ritu["key"]),"season_name":diet_plan.get("season_name",ritu["name"]),"ritu_principles":ritu["diet_principles"],"created_at":now,"user_id":user["id"],"ai_generated":True}
-        await db.diet_charts.insert_one(doc)
-        return DietChartResponse(**{k:v for k,v in doc.items() if k!="_id"})
-    except json.JSONDecodeError as e:
-        logger.error(f"JSON parse error: {e}")
-        raise HTTPException(status_code=500, detail="Failed to parse AI response — please try again")
-    except HTTPException: raise
+        import asyncio
+        loop = asyncio.get_event_loop()
+ 
+        def _call():
+            response = groq_client.chat.completions.create(
+                model="llama-3.3-70b-versatile",  # or "mixtral-8x7b-32768" for faster
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.7,
+                max_tokens=4096,
+            )
+            return response.choices[0].message.content
+ 
+        text = await loop.run_in_executor(None, _call)
+        text = text.strip()
+ 
+        # Strip markdown code fences if model wraps response in them
+        if text.startswith("```"):
+            lines = text.split("\n")
+            lines = lines[1:] if lines[0].startswith("```") else lines
+            lines = lines[:-1] if lines and lines[-1].strip() == "```" else lines
+            text = "\n".join(lines).strip()
+ 
+        return text
     except Exception as e:
-        logger.error(f"Diet generation error: {e}")
-        raise HTTPException(status_code=500, detail=f"Generation failed: {str(e)}")
+        logger.error(f"Groq API error: {e}")
+        raise HTTPException(status_code=500, detail=f"AI generation failed: {str(e)}")
 
 # ==================== NUTRIENT GAP ANALYSIS ====================
 
 @api_router.post("/diet-charts/{chart_id}/analyze-nutrients")
-async def analyze_nutrient_gaps(chart_id: str, user: dict=Depends(get_current_user)):
+async def call_ai(prompt: str) -> str:
     chart = await db.diet_charts.find_one({"id":chart_id,"user_id":user["id"]},{"_id":0})
     if not chart: raise HTTPException(status_code=404, detail="Diet chart not found")
     patient = await db.patients.find_one({"id":chart["patient_id"]},{"_id":0})
@@ -921,17 +942,32 @@ SAMPLE MEALS: {json.dumps(meals_summary)}
 Return ONLY valid JSON, no markdown fences:
 {{"overall_rating":"good","summary":"2-3 sentence overall assessment","gaps":[{{"nutrient":"Iron","current_estimate":"~8mg/day","recommended":"{rda['iron_mg']}mg/day","status":"low","severity":"moderate","ayurvedic_alternatives":["Sesame seeds","Fenugreek leaves","Amla","Dates"],"modern_alternatives":["Spinach","Lentils","Fortified cereals"],"explanation":"Why this matters..."}}],"strengths":["Good protein from moong dal"],"recommendations":["Add 1 tbsp sesame seeds to breakfast"],"ayurvedic_note":"Ayurvedic perspective..."}}"""
     try:
-        analysis = json.loads(await call_gemini(prompt))
-        report = {"chart_id":chart_id,"patient_id":chart["patient_id"],"chart_title":chart.get("title"),"patient_name":patient.get("name"),"patient_age":patient.get("age"),"patient_gender":patient.get("gender"),"rda_used":rda,"overall_rating":analysis.get("overall_rating","good"),"summary":analysis.get("summary",""),"gaps":analysis.get("gaps",[]),"strengths":analysis.get("strengths",[]),"recommendations":analysis.get("recommendations",[]),"ayurvedic_note":analysis.get("ayurvedic_note",""),"generated_at":datetime.now(timezone.utc).isoformat()}
-        await db.nutrient_reports.update_one({"chart_id":chart_id},{"$set":report},upsert=True)
-        return report
-    except json.JSONDecodeError as e:
-        logger.error(f"Nutrient analysis JSON error: {e}")
-        raise HTTPException(status_code=500, detail="Failed to parse analysis — please try again")
-    except HTTPException: raise
+        import asyncio
+        loop = asyncio.get_event_loop()
+ 
+        def _call():
+            response = groq_client.chat.completions.create(
+                model="llama-3.3-70b-versatile",  # or "mixtral-8x7b-32768" for faster
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.7,
+                max_tokens=4096,
+            )
+            return response.choices[0].message.content
+ 
+        text = await loop.run_in_executor(None, _call)
+        text = text.strip()
+ 
+        # Strip markdown code fences if model wraps response in them
+        if text.startswith("```"):
+            lines = text.split("\n")
+            lines = lines[1:] if lines[0].startswith("```") else lines
+            lines = lines[:-1] if lines and lines[-1].strip() == "```" else lines
+            text = "\n".join(lines).strip()
+ 
+        return text
     except Exception as e:
-        logger.error(f"Nutrient analysis error: {e}")
-        raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
+        logger.error(f"Groq API error: {e}")
+        raise HTTPException(status_code=500, detail=f"AI generation failed: {str(e)}")
 
 @api_router.get("/diet-charts/{chart_id}/nutrient-report")
 async def get_nutrient_report(chart_id: str, user: dict=Depends(get_current_user)):
@@ -1164,7 +1200,7 @@ async def delete_appointment(appt_id: str, user: dict = Depends(get_current_user
 # ==================== AYUASSIST CHATBOT ====================
 
 @api_router.post("/ayuchat")
-async def ayurveda_chat(request: ChatRequest, current_user: dict = Depends(get_current_user)):
+async def call_ai(prompt: str) -> str:
     history_text = ""
     if request.history and len(request.history) > 1:
         recent = request.history[-8:]
@@ -1179,12 +1215,32 @@ RESPONSE STYLE: Be concise but complete — 3 to 8 sentences. Use bullet points 
 CURRENT QUESTION: {request.message}
 Respond as AyuAssist:"""
     try:
-        reply = await call_gemini(prompt)
-        return {"reply": reply, "model": "gemini-2.5-flash"}
-    except HTTPException as e: raise e
+        import asyncio
+        loop = asyncio.get_event_loop()
+ 
+        def _call():
+            response = groq_client.chat.completions.create(
+                model="llama-3.3-70b-versatile",  # or "mixtral-8x7b-32768" for faster
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.7,
+                max_tokens=4096,
+            )
+            return response.choices[0].message.content
+ 
+        text = await loop.run_in_executor(None, _call)
+        text = text.strip()
+ 
+        # Strip markdown code fences if model wraps response in them
+        if text.startswith("```"):
+            lines = text.split("\n")
+            lines = lines[1:] if lines[0].startswith("```") else lines
+            lines = lines[:-1] if lines and lines[-1].strip() == "```" else lines
+            text = "\n".join(lines).strip()
+ 
+        return text
     except Exception as e:
-        logger.error(f"Chatbot error: {e}")
-        raise HTTPException(status_code=500, detail="Chatbot unavailable — please try again")
+        logger.error(f"Groq API error: {e}")
+        raise HTTPException(status_code=500, detail=f"AI generation failed: {str(e)}")
 
 # ==================== PATIENT PORTAL — AUTH ====================
 
