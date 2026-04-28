@@ -9,28 +9,26 @@ import { Leaf, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function Register() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [name, setName]                   = useState('');
+  const [email, setEmail]                 = useState('');
+  const [password, setPassword]           = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword]   = useState(false);
+  const [loading, setLoading]             = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!name || !email || !password || !confirmPassword) {
       toast.error('Please fill in all fields');
       return;
     }
-
     if (password !== confirmPassword) {
       toast.error('Passwords do not match');
       return;
     }
-
     if (password.length < 6) {
       toast.error('Password must be at least 6 characters');
       return;
@@ -74,43 +72,57 @@ export default function Register() {
               Start managing Ayurvedic diet plans today
             </CardDescription>
           </CardHeader>
-          <form onSubmit={handleSubmit}>
+
+          <form onSubmit={handleSubmit} autoComplete="off">
             <CardContent className="space-y-4">
+
+              {/* Hidden dummy fields — tricks Chrome/Safari into not autofilling real fields */}
+              <input type="text"     style={{ display: 'none' }} aria-hidden="true" readOnly />
+              <input type="password" style={{ display: 'none' }} aria-hidden="true" readOnly />
+
               <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
+                <Label htmlFor="reg_name">Full Name</Label>
                 <Input
-                  id="name"
+                  id="reg_name"
+                  name="reg_name"
                   type="text"
                   placeholder="Dr. Sharma"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  autoComplete="new-password"
                   className="h-11"
                   data-testid="name-input"
                   disabled={loading}
                 />
               </div>
+
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="reg_email">Email</Label>
                 <Input
-                  id="email"
+                  id="reg_email"
+                  name="reg_email"
                   type="email"
                   placeholder="doctor@ayucare.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="new-password"
                   className="h-11"
                   data-testid="email-input"
                   disabled={loading}
                 />
               </div>
+
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="reg_password">Password</Label>
                 <div className="relative">
                   <Input
-                    id="password"
+                    id="reg_password"
+                    name="reg_password"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Create a strong password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="new-password"
                     className="h-11 pr-10"
                     data-testid="password-input"
                     disabled={loading}
@@ -125,23 +137,27 @@ export default function Register() {
                   </button>
                 </div>
               </div>
+
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Label htmlFor="reg_confirm">Confirm Password</Label>
                 <Input
-                  id="confirmPassword"
+                  id="reg_confirm"
+                  name="reg_confirm"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Confirm your password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  autoComplete="new-password"
                   className="h-11"
                   data-testid="confirm-password-input"
                   disabled={loading}
                 />
               </div>
+
             </CardContent>
             <CardFooter className="flex flex-col gap-4">
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full h-11 ayur-btn-primary"
                 disabled={loading}
                 data-testid="register-submit-btn"
@@ -165,7 +181,6 @@ export default function Register() {
           </form>
         </Card>
 
-        {/* Footer */}
         <p className="text-center text-sm text-stone-500 mt-8 animate-fade-in stagger-2">
           By creating an account, you agree to our terms of service
         </p>

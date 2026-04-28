@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/ui/button';
@@ -9,21 +9,24 @@ import { Leaf, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail]               = useState('');
+  const [password, setPassword]         = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading]           = useState(false);
   const { login } = useAuth();
-  const navigate = useNavigate();
+  const navigate  = useNavigate();
+
+  // ── Debug: confirm which backend URL React is using ──
+  useEffect(() => {
+    console.log('🌐 BACKEND URL:', process.env.REACT_APP_BACKEND_URL);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     if (!email || !password) {
       toast.error('Please fill in all fields');
       return;
     }
-
     setLoading(true);
     try {
       await login(email, password);
@@ -62,30 +65,42 @@ export default function Login() {
               Sign in to continue to your dashboard
             </CardDescription>
           </CardHeader>
-          <form onSubmit={handleSubmit}>
+
+          {/* autoComplete="off" on the form stops browser from filling it */}
+          <form onSubmit={handleSubmit} autoComplete="off">
             <CardContent className="space-y-4">
+
+              {/* Hidden dummy fields — tricks Chrome/Safari into not autofilling real fields */}
+              <input type="text"     style={{ display: 'none' }} aria-hidden="true" readOnly />
+              <input type="password" style={{ display: 'none' }} aria-hidden="true" readOnly />
+
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="ayucare_email">Email</Label>
                 <Input
-                  id="email"
+                  id="ayucare_email"
+                  name="ayucare_email"
                   type="email"
                   placeholder="doctor@ayucare.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="new-password"
                   className="h-11"
                   data-testid="email-input"
                   disabled={loading}
                 />
               </div>
+
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="ayucare_password">Password</Label>
                 <div className="relative">
                   <Input
-                    id="password"
+                    id="ayucare_password"
+                    name="ayucare_password"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="new-password"
                     className="h-11 pr-10"
                     data-testid="password-input"
                     disabled={loading}
@@ -100,10 +115,11 @@ export default function Login() {
                   </button>
                 </div>
               </div>
+
             </CardContent>
             <CardFooter className="flex flex-col gap-4">
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full h-11 ayur-btn-primary"
                 disabled={loading}
                 data-testid="login-submit-btn"
@@ -127,7 +143,6 @@ export default function Login() {
           </form>
         </Card>
 
-        {/* Footer */}
         <p className="text-center text-sm text-stone-500 mt-8 animate-fade-in stagger-2">
           Holistic healthcare powered by ancient wisdom
         </p>

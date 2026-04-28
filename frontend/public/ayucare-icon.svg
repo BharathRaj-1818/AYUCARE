@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background gradient — deep green to emerald -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#1a4a2e"/>
+      <stop offset="100%" stop-color="#2d6a4f"/>
+    </linearGradient>
+
+    <!-- Leaf gradient — light green -->
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#95d5b2"/>
+      <stop offset="100%" stop-color="#52b788"/>
+    </linearGradient>
+
+    <!-- Center lotus gradient — warm gold -->
+    <linearGradient id="lotusGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#ffd166"/>
+      <stop offset="100%" stop-color="#f4a261"/>
+    </linearGradient>
+
+    <!-- Glow filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Soft shadow -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#00000033"/>
+    </filter>
+  </defs>
+
+  <!-- ── Rounded square background ── -->
+  <rect width="512" height="512" rx="112" ry="112" fill="url(#bgGrad)"/>
+
+  <!-- ── Subtle inner ring ── -->
+  <rect x="18" y="18" width="476" height="476" rx="96" ry="96"
+    fill="none" stroke="#ffffff10" stroke-width="3"/>
+
+  <!-- ── Background decorative circle ── -->
+  <circle cx="256" cy="256" r="175" fill="#ffffff08"/>
+
+  <!-- ── LOTUS PETALS — outer ring (8 petals) ── -->
+  <!-- Top -->
+  <ellipse cx="256" cy="148" rx="28" ry="68"
+    fill="url(#leafGrad)" opacity="0.85" filter="url(#shadow)"/>
+  <!-- Top-right -->
+  <ellipse cx="330" cy="178" rx="28" ry="68"
+    fill="url(#leafGrad)" opacity="0.80" filter="url(#shadow)"
+    transform="rotate(45 330 178)"/>
+  <!-- Right -->
+  <ellipse cx="364" cy="256" rx="28" ry="68"
+    fill="url(#leafGrad)" opacity="0.85" filter="url(#shadow)"
+    transform="rotate(90 364 256)"/>
+  <!-- Bottom-right -->
+  <ellipse cx="330" cy="334" rx="28" ry="68"
+    fill="url(#leafGrad)" opacity="0.80" filter="url(#shadow)"
+    transform="rotate(135 330 334)"/>
+  <!-- Bottom -->
+  <ellipse cx="256" cy="364" rx="28" ry="68"
+    fill="url(#leafGrad)" opacity="0.85" filter="url(#shadow)"/>
+  <!-- Bottom-left -->
+  <ellipse cx="182" cy="334" rx="28" ry="68"
+    fill="url(#leafGrad)" opacity="0.80" filter="url(#shadow)"
+    transform="rotate(45 182 334)"/>
+  <!-- Left -->
+  <ellipse cx="148" cy="256" rx="28" ry="68"
+    fill="url(#leafGrad)" opacity="0.85" filter="url(#shadow)"
+    transform="rotate(90 148 256)"/>
+  <!-- Top-left -->
+  <ellipse cx="182" cy="178" rx="28" ry="68"
+    fill="url(#leafGrad)" opacity="0.80" filter="url(#shadow)"
+    transform="rotate(135 182 178)"/>
+
+  <!-- ── INNER PETALS — closer ring (8 petals, gold tint) ── -->
+  <ellipse cx="256" cy="190" rx="20" ry="52"
+    fill="url(#lotusGrad)" opacity="0.70"/>
+  <ellipse cx="304" cy="208" rx="20" ry="52"
+    fill="url(#lotusGrad)" opacity="0.65"
+    transform="rotate(45 304 208)"/>
+  <ellipse cx="322" cy="256" rx="20" ry="52"
+    fill="url(#lotusGrad)" opacity="0.70"
+    transform="rotate(90 322 256)"/>
+  <ellipse cx="304" cy="304" rx="20" ry="52"
+    fill="url(#lotusGrad)" opacity="0.65"
+    transform="rotate(135 304 304)"/>
+  <ellipse cx="256" cy="322" rx="20" ry="52"
+    fill="url(#lotusGrad)" opacity="0.70"/>
+  <ellipse cx="208" cy="304" rx="20" ry="52"
+    fill="url(#lotusGrad)" opacity="0.65"
+    transform="rotate(45 208 304)"/>
+  <ellipse cx="190" cy="256" rx="20" ry="52"
+    fill="url(#lotusGrad)" opacity="0.70"
+    transform="rotate(90 190 256)"/>
+  <ellipse cx="208" cy="208" rx="20" ry="52"
+    fill="url(#lotusGrad)" opacity="0.65"
+    transform="rotate(135 208 208)"/>
+
+  <!-- ── CENTER CIRCLE ── -->
+  <circle cx="256" cy="256" r="54"
+    fill="url(#lotusGrad)" filter="url(#glow)"/>
+  <circle cx="256" cy="256" r="44" fill="#fffbf0"/>
+
+  <!-- ── "A" letter in center ── -->
+  <text x="256" y="275"
+    font-family="Georgia, serif"
+    font-size="44"
+    font-weight="bold"
+    fill="#1a4a2e"
+    text-anchor="middle"
+    dominant-baseline="middle">A</text>
+
+  <!-- ── Small leaf accent above A ── -->
+  <ellipse cx="256" cy="230" rx="7" ry="13"
+    fill="#2d6a4f" opacity="0.6"/>
+
+  <!-- ── Bottom text: AyuCare ── -->
+  <text x="256" y="440"
+    font-family="Georgia, serif"
+    font-size="36"
+    font-weight="bold"
+    fill="#ffffff"
+    text-anchor="middle"
+    opacity="0.92"
+    letter-spacing="2">AyuCare</text>
+
+  <!-- ── Subtle bottom tagline ── -->
+  <text x="256" y="470"
+    font-family="Arial, sans-serif"
+    font-size="16"
+    fill="#95d5b2"
+    text-anchor="middle"
+    opacity="0.75"
+    letter-spacing="1">Ayurvedic Wellness</text>
+</svg>
