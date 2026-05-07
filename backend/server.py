@@ -728,9 +728,22 @@ def send_invite_email(patient_email: str, patient_name: str, invite_code: str, q
     qr_img.add_header("Content-Disposition", "inline", filename="qrcode.png")
     msg.attach(qr_img)
 
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-        server.login(smtp_email, smtp_password)
-        server.sendmail(smtp_email, patient_email, msg.as_string())
+    try:
+        print("Connecting SMTP...")
+
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            print("Logging in...")
+            server.login(smtp_email, smtp_password)
+
+            print("Sending mail...")
+            server.sendmail(smtp_email, patient_email, msg.as_string())
+
+            print("Mail sent successfully!")
+
+    except Exception as e:
+        print("SMTP ERROR:", str(e))
+        raise HTTPException(status_code=500, detail=str(e))
+    
 
 # ==================== AUTH ROUTES ====================
 
@@ -1216,7 +1229,7 @@ CURRENT QUESTION: {request.message}
 Respond as AyuAssist:"""
     try:
         reply = await call_ai(prompt, temperature=0.7)
-        return {"reply": reply, "model": "gemini-2.5-flash"}
+        return {"reply": reply, "model": "groq"}
     except HTTPException as e: raise e
     except Exception as e:
         logger.error(f"Chatbot error: {e}")
@@ -2184,7 +2197,7 @@ async def seed_foods_database():
 
 
 @api_router.get("/health")
-async def health(): return {"status":"healthy","ai":"gemini-1.5-flash","timestamp":datetime.now(timezone.utc).isoformat()}
+async def health(): return {"status":"healthy","ai":"groq","timestamp":datetime.now(timezone.utc).isoformat()}
 
 # ← ADD THIS LINE
 app.include_router(api_router)

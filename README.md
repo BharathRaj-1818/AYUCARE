@@ -1,7 +1,7 @@
 # 🌿 AyuCare — Comprehensive Cloud-Based Ayurvedic Diet Management Software
 
 > **BE Final Year Project** | Problem ID: 25024  
-> An intelligent, full-stack Ayurvedic diet management platform for dietitians and patients — powered by Gemini AI, built with FastAPI + React.js + MongoDB.
+> An intelligent, full-stack Ayurvedic diet management platform for dietitians and patients — powered by Groq AI, built with FastAPI + React.js + MongoDB.
 
 ---
 
@@ -30,7 +30,7 @@
 
 ## Overview
 
-AyuCare is a comprehensive cloud-based Ayurvedic diet management system designed for Ayurvedic dietitians and their patients. It combines ancient Ayurvedic principles — Prakriti (body constitution), Ritucharya (seasonal diet), Dosha analysis — with modern AI (Google Gemini 1.5 Flash) to generate personalized diet plans, track progress, and enable real-time video consultations.
+AyuCare is a comprehensive cloud-based Ayurvedic diet management system designed for Ayurvedic dietitians and their patients. It combines ancient Ayurvedic principles — Prakriti (body constitution), Ritucharya (seasonal diet), Dosha analysis — with modern AI (Groq) to generate personalized diet plans, track progress, and enable real-time video consultations.
 
 The platform has two distinct portals:
 - **Dietitian Portal** — full patient management, diet chart creation, AI-powered diet generation, appointments, herbs database, and analytics.
@@ -48,12 +48,12 @@ The platform has two distinct portals:
 | 🍽️ Food Database | 83 seeded Ayurvedic foods with nutrients |
 | 📖 Recipe Management | Create and manage Ayurvedic recipes |
 | 📋 Diet Chart CRUD | Create personalized diet charts per patient |
-| 🤖 AI Diet Generation | Gemini AI generates full diet plans from patient profile |
+| 🤖 AI Diet Generation | Groq AI generates full diet plans from patient profile |
 | 🔬 Nutrient Gap Analysis | AI analyzes nutritional deficiencies in diet charts |
 | 📄 PDF Export | Download diet charts as formatted PDFs (ReportLab) |
 | 🧘 Prakriti Quiz | 20-question Vata/Pitta/Kapha constitution assessment |
 | 🌿 Ritucharya Engine | Season-based diet recommendations (6 seasons) |
-| 💬 AyuAssist Chatbot | Gemini-powered Ayurvedic assistant chatbot |
+| 💬 AyuAssist Chatbot | Groq-powered Ayurvedic assistant chatbot |
 | 📅 Appointments | Schedule, manage, and conduct video consultations |
 | 📹 Video Consultations | jitsi video calls |
 | 🌱 Herbs & Supplements | Searchable herbs database with Ayurvedic properties |
@@ -80,7 +80,7 @@ The platform has two distinct portals:
 | Layer | Technology |
 |---|---|
 | **Backend** | FastAPI (Python 3.10+), Motor (async MongoDB), JWT (python-jose), bcrypt |
-| **AI** | Google Gemini 1.5 Flash (`google-generativeai`) |
+| **AI** | Groq ai |
 | **Frontend** | React.js 19, TailwindCSS, Shadcn UI, Recharts, React Router v7 |
 | **Database** | MongoDB (via Motor async client) |
 | **PDF Generation** | ReportLab |
@@ -226,7 +226,7 @@ Make sure you have the following installed:
 - **Node.js** 18+ and **Yarn**
 - **MongoDB** (local or MongoDB Atlas cloud)
 - **Gmail account** with an App Password (for email invites)
-- **Google Gemini API Key** — from [Google AI Studio](https://aistudio.google.com/)
+- **Groq API Key** — from (console.groq.com/keys)
 
 
 ---
@@ -282,7 +282,7 @@ yarn add i18next react-i18next i18next-browser-languagedetector
 ```env
 MONGO_URL=mongodb://localhost:27017          # or your MongoDB Atlas URI
 DB_NAME=ayucare
-GEMINI_API_KEY=your_gemini_api_key_here
+GROQ_API_KEY=your_groq_api_key_here
 JWT_SECRET=ayucare-secret-key-2024
 SMTP_EMAIL=youremail@gmail.com               # Gmail address
 SMTP_PASSWORD=xxxx xxxx xxxx xxxx           # Gmail App Password (16 chars)
@@ -369,14 +369,14 @@ curl -X POST http://localhost:8001/api/herbs/seed \
 |---|---|---|
 | GET | `/api/diet-charts` | List all diet charts |
 | POST | `/api/diet-charts` | Create diet chart |
-| POST | `/api/ai/generate-diet` | AI-generate a diet chart (Gemini) |
+| POST | `/api/ai/generate-diet` | AI-generate a diet chart (Groq) |
 | POST | `/api/diet-charts/:id/analyze-nutrients` | AI nutrient gap analysis |
 | GET | `/api/diet-charts/:id/pdf` | Download chart as PDF |
 
 ### AI & Ayurveda
 | Method | Endpoint | Description |
 |---|---|---|
-| POST | `/api/ayuchat` | AyuAssist chatbot (Gemini) |
+| POST | `/api/ayuchat` | AyuAssist chatbot (Groq) |
 | GET | `/api/prakriti/questions` | Get 20 Prakriti quiz questions |
 | POST | `/api/prakriti/assess` | Submit quiz, get Dosha result |
 | GET | `/api/ritucharya/current` | Get current season diet recommendations |
@@ -443,7 +443,7 @@ curl -X POST http://localhost:8001/api/herbs/seed \
 │   └──────────┬─────────────────────────┬─────────────────┘   │
 │              │                         │                     │
 │   ┌──────────▼──────────┐   ┌──────────▼──────────┐         │
-│   │   MongoDB (Motor)   │   │  Gemini 1.5 Flash   │         │
+│   │   MongoDB (Motor)   │   │  Groq   │         │
 │   │  10 Collections     │   │  AI Diet + Chat     │         │
 │   └─────────────────────┘   └─────────────────────┘         │
 └──────────────────────────────────────────────────────────────┘
@@ -610,7 +610,7 @@ To test the patient PWA on a physical phone (same WiFi network):
 | 5 | `/patient/appointments` and `/patient/progress` were unguarded routes | Added auth guards in `App.js` |
 | 6 | "My Progress" nav link duplicated in `PatientLayout.jsx` | Removed duplicate nav entry |
 | 7 | `localhost:8001` unreachable during mobile testing | Use local IP `192.168.x.x:8001` with `--host 0.0.0.0` |
-| 9 | `gemini-1.5-flash` model deprecated in API v1beta | Update to `gemini-1.5-pro` or latest available model in `server.py` |
+| 9 | `groq`  model in `server.py` |
 
 ---
 

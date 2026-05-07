@@ -77,9 +77,9 @@ const calculateStreak = (logDates) => {
   return streak;
 };
 
-// Mock function to simulate Gemini API dosha drift detection
+// Mock function to simulate Groq API dosha drift detection
 const detectDoshaDrift = async (patientId, recentLogs) => {
-  // In production, this would call your Gemini API
+  // In production, this would call your Groq API
   // For now, we'll simulate with logic based on recent patterns
   
   if (!recentLogs || recentLogs.length < 3) return null;
