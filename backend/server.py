@@ -728,35 +728,21 @@ def send_invite_email(patient_email: str, patient_name: str, invite_code: str, q
     qr_img.add_header("Content-Disposition", "inline", filename="qrcode.png")
     msg.attach(qr_img)
 
-    server = None
+    try:
+        print("Connecting SMTP...")
 
-try:
-    print("Connecting SMTP...")
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            print("Logging in...")
+            server.login(smtp_email, smtp_password)
 
-    server = smtplib.SMTP("smtp.gmail.com", 587, timeout=30)
+            print("Sending mail...")
+            server.sendmail(smtp_email, patient_email, msg.as_string())
 
-    server.ehlo()
+            print("Mail sent successfully!")
 
-    print("Starting TLS...")
-    server.starttls()
-
-    server.ehlo()
-
-    print("Logging in...")
-    server.login(smtp_email, smtp_password)
-
-    print("Sending mail...")
-    server.sendmail(smtp_email, patient_email, msg.as_string())
-
-    print("Mail sent successfully!")
-
-except Exception as e:
-    print("SMTP ERROR:", str(e))
-    raise HTTPException(status_code=500, detail=str(e))
-
-finally:
-    if server:
-        server.quit()
+    except Exception as e:
+        print("SMTP ERROR:", str(e))
+        raise HTTPException(status_code=500, detail=str(e))
     
 
 # ==================== AUTH ROUTES ====================
